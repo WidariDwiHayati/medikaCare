@@ -2,7 +2,7 @@
 // 1. VARIABEL GLOBAL & REFERENSI DOM
 // ==========================================
 // Menetapkan URL utama backend API secara global ke dalam objek window agar bisa diakses dari file JS lain
-window.API_URL = "https://medika-care.vercel.app/";
+window.API_URL = "https://medika-care.vercel.app";
 
 // Mengambil referensi elemen form login dari DOM
 const formLogin = document.getElementById("form-login");
