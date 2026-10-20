@@ -1,0 +1,524 @@
+<!-- Deklarasi tipe dokumen HTML5 -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <!-- Pengaturan karakter encoding standar (UTF-8) -->
+    <meta charset="utf-8"/>
+    <!-- Konfigurasi viewport agar tampilan responsif di berbagai perangkat (mobile-friendly) -->
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <!-- Judul halaman yang akan tampil di tab browser -->
+    <title>MedikaCare - Prediksi AI</title>
+    
+    <!-- ========================================== -->
+    <!-- 1. IMPORT FONT & IKON DARI GOOGLE          -->
+    <!-- ========================================== -->
+    <!-- Mengimpor font 'Plus Jakarta Sans' untuk tipografi aplikasi -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <!-- Mengimpor Material Symbols Outlined untuk ikon-ikon antarmuka -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+    
+    <!-- ========================================== -->
+    <!-- 2. KUSTOMISASI CSS (NEUMORPHISM)           -->
+    <!-- ========================================== -->
+    <style>
+        /* Mengatur base layer agar tidak ada margin default dan mematikan efek bounce scroll */
+        @layer base{
+            html,body{margin:0;padding:0;}
+            body{overscroll-behavior:none;}
+            main>:first-child{margin-top:0!important;}
+            main>:last-child{margin-bottom:0!important;}
+        }
+        /* Menyembunyikan scrollbar webkit agar UI terlihat lebih bersih */
+        ::-webkit-scrollbar{display:none;}
+        /* Kelas utilitas untuk efek Neumorphism menonjol (timbul) */
+        .neo-raised{box-shadow:6px 6px 12px rgba(0,0,0,0.08),-6px -6px 12px rgba(255,255,255,0.6);}
+        /* Kelas utilitas untuk efek Neumorphism tenggelam (inset) */
+        .neo-inset{box-shadow:inset 4px 4px 8px rgba(0,0,0,0.06),inset -4px -4px 8px rgba(255,255,255,0.5);}
+    </style>
+
+    <!-- ========================================== -->
+    <!-- 3. KONFIGURASI TAILWIND CSS                -->
+    <!-- ========================================== -->
+    <!-- Memuat script Tailwind CSS dari CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Mendefinisikan palet warna kustom dan font keluarga untuk Tailwind -->
+    <script id="tailwind-config">
+        tailwind.config={"darkMode":"class","theme":{"extend":{"colors":{"on-surface":"#2e3040","on-tertiary-container":"#3b1f63","primary-fixed":"#e0e2ff","outline-variant":"#d0d2dc","on-secondary-container":"#585a68","surface-container":"#e2e4ea","surface-variant":"#dcdee4","error-container":"#fee2e2","tertiary":"#7c3aed","inverse-surface":"#2e3040","on-secondary":"#ffffff","inverse-on-surface":"#e8eaf0","secondary-fixed-dim":"#b8baca","on-secondary-fixed-variant":"#404252","on-tertiary-fixed":"#2e1065","on-surface-variant":"#585a68","on-tertiary-fixed-variant":"#5b21b6","on-tertiary":"#ffffff","secondary-container":"#d8dae6","surface-container-lowest":"#f0f2f8","inverse-primary":"#a5b4fc","surface-dim":"#d4d6dc","surface-container-high":"#dcdee4","on-secondary-fixed":"#1a1b26","tertiary-fixed":"#ede9fe","error":"#dc2626","on-primary-fixed":"#1e1b4b","secondary":"#6c6e7e","on-error":"#ffffff","primary-fixed-dim":"#a5b4fc","on-background":"#2e3040","primary":"#6366f1","tertiary-container":"#a78bfa","secondary-fixed":"#d8dae6","tertiary-fixed-dim":"#c4b5fd","on-primary":"#ffffff","surface":"#e8eaf0","outline":"#8a8c9a","background":"#e8eaf0","on-primary-fixed-variant":"#4338ca","on-primary-container":"#e0e2ff","surface-container-highest":"#d6d8de","on-error-container":"#991b1b","surface-container-low":"#e5e7ed","primary-container":"#818cf8","surface-bright":"#edeef4","surface-tint":"#6366f1"},"fontFamily":{"headline":["Plus Jakarta Sans"],"body":["Plus Jakarta Sans"]}}}}
+    </script>
+
+    <!-- ========================================== -->
+    <!-- 4. LIBRARY EKSTERNAL (GRAFIK & PDF)        -->
+    <!-- ========================================== -->
+    <!-- Library Chart.js untuk menggambar grafik di kanvas HTML -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Library html2pdf untuk mengekspor elemen HTML menjadi file PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+
+<!-- Body dengan warna latar surface, font dasar, dan minimal setinggi layar -->
+<body class="bg-surface font-body text-on-surface antialiased min-h-screen">
+
+    <!-- ====================================================================== -->
+    <!-- BAGIAN A: HALAMAN LOGIN                                                -->
+    <!-- ====================================================================== -->
+    <!-- Kontainer utama halaman login, diposisikan absolut agar menutupi seluruh layar -->
+    <div id="halaman-login" class="flex items-center justify-center min-h-screen p-6 w-full absolute top-0 left-0 z-50 bg-surface">
+        <div class="flex flex-col w-full items-center justify-center">
+            <!-- Kotak panel login dengan efek bayangan Neumorphism -->
+            <div class="w-full max-w-4xl neo-raised rounded-xl bg-surface p-6 sm:p-10 transition-all duration-300">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    
+                    <!-- Sisi Kiri: Informasi Aplikasi (Logo dan Deskripsi) -->
+                    <div class="lg:col-span-5 flex flex-col justify-between space-y-6">
+                        <div>
+                            <!-- Wadah Logo -->
+                            <div class="w-20 h-20 rounded-xl bg-surface neo-raised flex items-center justify-center p-3 mb-6">
+                                <img alt="MedikaCare" class="w-full h-full object-contain rounded-lg" src="https://lh3.googleusercontent.com/aida/..." onerror="this.src='https://placehold.co/100x100/6366f1/ffffff?text=MC'"/>
+                            </div>
+                            <!-- Teks Judul dan Deskripsi Singkat -->
+                            <div class="space-y-2">
+                                <h1 class="text-2xl sm:text-3xl font-semibold text-on-surface tracking-tight leading-tight">Sistem Informasi Rekam Medis & Prediksi AI</h1>
+                                <p class="text-sm text-on-surface-variant leading-relaxed">Platform terintegrasi diagnostik presisi, pemantauan bangsal cerdas, dan rekam medik elektronik.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sisi Kanan: Formulir Login -->
+                    <div class="lg:col-span-7">
+                        <div class="bg-surface rounded-xl neo-raised p-6 sm:p-8">
+                            
+                            <!-- Header Form Login -->
+                            <div class="flex items-center justify-between mb-6 pb-2">
+                                <div><h2 class="text-lg font-semibold text-on-surface">Otentikasi Staf Klinis</h2></div>
+                                <div class="w-10 h-10 rounded-full bg-surface neo-raised flex items-center justify-center text-primary">
+                                    <span class="material-symbols-outlined text-xl">badge</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Wadah Pesan Error (Disembunyikan secara default dengan class 'hidden') -->
+                            <div id="login-error" class="hidden mb-6 p-4 rounded-xl bg-error-container text-error flex items-start gap-3">
+                                <span class="material-symbols-outlined text-xl flex-shrink-0 mt-0.5">error</span>
+                                <div class="text-xs leading-relaxed flex-1">
+                                    <span class="font-semibold block mb-0.5">Gagal Masuk</span>
+                                    Kata sandi salah atau akun tidak ditemukan.
+                                </div>
+                            </div>
+
+                            <!-- Formulir Input Login -->
+                            <form id="form-login" class="space-y-5">
+                                <!-- Input Username -->
+                                <div>
+                                    <label class="block text-xs font-semibold text-on-surface mb-2 tracking-wide uppercase">NIP / Username</label>
+                                    <div class="relative flex items-center rounded-xl bg-surface neo-inset px-4 py-3 text-on-surface">
+                                        <span class="material-symbols-outlined text-secondary text-xl mr-3 select-none">person</span>
+                                        <input id="input-username" class="w-full bg-transparent border-0 outline-none text-sm text-on-surface placeholder:text-outline font-medium" placeholder="Masukkan Username" required type="text" />
+                                    </div>
+                                </div>
+                                <!-- Input Password -->
+                                <div>
+                                    <label class="block text-xs font-semibold text-on-surface mb-2 tracking-wide uppercase">Kata Sandi</label>
+                                    <div class="relative flex items-center rounded-xl bg-surface neo-inset px-4 py-3 text-on-surface">
+                                        <span class="material-symbols-outlined text-secondary text-xl mr-3 select-none">lock</span>
+                                        <input id="input-password" class="w-full bg-transparent border-0 outline-none text-sm text-on-surface placeholder:text-outline font-medium tracking-wider" placeholder="Masukkan Kata Sandi" required type="password" />
+                                    </div>
+                                </div>
+                                <!-- Tombol Submit Login -->
+                                <div class="pt-2">
+                                    <button type="submit" class="w-full py-3.5 px-6 rounded-xl bg-surface neo-raised active:neo-inset text-primary font-semibold text-sm flex items-center justify-center gap-2 hover:text-on-tertiary-fixed-variant transition-all cursor-pointer">
+                                        <span>Masuk ke Sistem</span>
+                                        <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                                    </button>
+                                </div>
+                            </form>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ====================================================================== -->
+    <!-- BAGIAN B: HALAMAN DASHBOARD UTAMA                                      -->
+    <!-- ====================================================================== -->
+    <!-- Halaman utama disembunyikan (hidden) sampai pengguna berhasil login -->
+    <div id="halaman-dashboard" class="hidden w-full min-h-screen bg-surface">
+        
+        <!-- --- BAGIAN B.1: SIDEBAR NAVIGASI KIRI --- -->
+        <aside class="fixed left-0 top-0 h-full w-72 bg-surface z-50 flex flex-col justify-between py-6 px-4 select-none shadow-[2px_0_12px_rgba(0,0,0,0.05)]">
+            <div class="flex flex-col gap-6">
+                <!-- Identitas Brand di Sidebar -->
+                <div class="flex items-center gap-3 px-3 py-2">
+                    <img alt="Logo" class="h-8 w-auto object-contain rounded" src="https://lh3.googleusercontent.com/aida/..." onerror="this.src='https://placehold.co/50x50/6366f1/ffffff?text=MC'"/>
+                    <div class="flex flex-col">
+                        <span class="font-headline font-semibold text-base leading-tight tracking-tight text-on-surface">MedikaCare</span>
+                    </div>
+                </div>
+                <!-- Garis Pemisah -->
+                <div class="h-px w-full bg-surface-variant/40"></div>
+                
+                <!-- Kumpulan Tombol Navigasi Menu -->
+                <nav class="flex flex-col gap-2.5">
+                    <!-- Tombol Menu: Input Kunjungan -->
+                    <button id="menu-input" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-on-surface hover:neo-inset hover:text-primary font-semibold">
+                        <span class="material-symbols-outlined text-[20px]">edit_calendar</span>
+                        <span class="text-sm tracking-wide">Input Kunjungan</span>
+                    </button>
+                    <!-- Tombol Menu: Riwayat Pasien -->
+                    <button id="menu-riwayat" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-on-surface hover:neo-inset hover:text-primary font-semibold">
+                        <span class="material-symbols-outlined text-[20px]">history</span>
+                        <span class="text-sm tracking-wide">Riwayat Pasien</span>
+                    </button>
+                    <!-- Tombol Menu: Dashboard AI (Bisa disembunyikan berdasarkan Role) -->
+                    <button id="menu-prediksi" class="hidden w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-on-surface hover:neo-inset hover:text-primary font-semibold">
+                        <span class="material-symbols-outlined text-[20px]">insights</span>
+                        <span class="text-sm tracking-wide">Dashboard AI</span>
+                    </button>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Area Konten Utama (Memiliki padding kiri sebesar lebar sidebar) -->
+        <div class="pl-72 flex flex-col min-h-screen">
+            
+            <!-- --- BAGIAN B.2: HEADER ATAS --- -->
+            <header class="fixed top-0 left-72 right-0 h-16 bg-surface/90 backdrop-blur-xl z-40 px-8 flex items-center justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+                <!-- Bagian Kiri Header (Kosong/Tempat Breadcrumb nantinya) -->
+                <div class="flex items-center gap-4"></div>
+                
+                <!-- Bagian Kanan Header: Profil & Logout -->
+                <div class="flex items-center gap-4">
+                    <!-- Area Nama dan Role User -->
+                    <div class="flex items-center gap-3 border-r border-surface-variant/60 pr-4">
+                        <div class="flex flex-col items-end">
+                            <span id="nama-user-aktif" class="text-xs font-semibold text-on-surface leading-snug">Nama User</span>
+                            <span id="role-user-aktif" class="px-2 py-0.5 mt-1 rounded-full text-[10px] font-medium bg-primary-fixed text-on-primary-fixed-variant leading-tight">Role</span>
+                        </div>
+                        <!-- Ikon Avatar Profil -->
+                        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                            <span class="material-symbols-outlined text-on-primary text-[18px]">person</span>
+                        </div>
+                    </div>
+                    <!-- Tombol Logout -->
+                    <button onclick="logout()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface neo-raised text-on-surface-variant hover:text-error text-xs font-medium active:neo-inset transition-all">
+                        <span class="material-symbols-outlined text-[16px]">logout</span>
+                        <span>Keluar</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- --- BAGIAN B.3: KONTEN DINAMIS (VIEWS) --- -->
+            <!-- Area utama untuk menampilkan tampilan yang berbeda saat menu di-klik -->
+            <main class="relative pt-24 px-8 pb-12 flex-1 w-full bg-surface">
+                
+                <!-- === VIEW 1: FORM INPUT KUNJUNGAN === -->
+                <div id="view-input" class="w-full flex flex-col gap-6">
+                    <!-- Judul Halaman Input -->
+                    <div class="flex flex-col gap-1.5 mb-2">
+                        <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary">
+                            <span class="w-2 h-2 rounded-full bg-primary"></span> Pencatatan Harian
+                        </div>
+                        <h1 class="text-2xl lg:text-3xl font-headline font-semibold text-on-surface tracking-tight">Formulir Input Data Kunjungan Pasien</h1>
+                        <p class="text-sm text-on-surface-variant max-w-2xl leading-relaxed">Pencatatan real-time kunjungan pasien untuk agregasi analitik epidemiologi.</p>
+                    </div>
+
+                    <!-- Panel Formulir Utama -->
+                    <div class="bg-surface rounded-xl p-6 lg:p-8 neo-raised flex flex-col gap-6 w-full max-w-4xl">
+                        <!-- Header Internal Formulir -->
+                        <div class="flex items-center justify-between border-b border-surface-variant/40 pb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-surface neo-inset flex items-center justify-center text-primary">
+                                    <span class="material-symbols-outlined text-[22px]">playlist_add</span>
+                                </div>
+                                <div>
+                                    <h2 class="text-base font-semibold text-on-surface">Detail Rekam Kunjungan</h2>
+                                    <p class="text-xs text-on-surface-variant">Lengkapi kolom di bawah ini secara akurat dan cermat.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tag Form HTML -->
+                        <form id="form-kunjungan" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            
+                            <!-- Input: Tanggal Kunjungan -->
+                            <div class="flex flex-col gap-2">
+                                <label class="text-xs font-semibold text-on-surface flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[16px] text-primary">calendar_today</span>
+                                    Tanggal Kunjungan <span class="text-error">*</span>
+                                </label>
+                                <input type="date" id="input-tanggal" required class="w-full bg-surface rounded-xl px-4 py-3 text-sm text-on-surface font-medium neo-inset focus:outline-none focus:text-primary transition-all"/>
+                            </div>
+
+                            <!-- Input: Nama Pasien -->
+                            <div class="flex flex-col gap-2">
+                                <label class="text-xs font-semibold text-on-surface flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[16px] text-primary">person</span>
+                                    Nama Pasien <span class="text-error">*</span>
+                                </label>
+                                <input type="text" id="input-nama" required placeholder="Ketik nama lengkap..." class="w-full bg-surface rounded-xl px-4 py-3 text-sm text-on-surface font-medium neo-inset focus:outline-none focus:text-primary transition-all"/>
+                            </div>
+
+                            <!-- Input: Penyakit (Berdasarkan ICD-10 menggunakan Datalist) -->
+                            <div class="flex flex-col gap-2">
+                                <label class="text-xs font-semibold text-on-surface flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[16px] text-primary">coronavirus</span>
+                                    Kode ICD-10 & Penyakit <span class="text-error">*</span>
+                                </label>
+                                <input list="daftar-icd" id="input-penyakit" required placeholder="Pilih atau ketik..." class="w-full bg-surface rounded-xl px-4 py-3 text-sm text-on-surface font-medium neo-inset focus:outline-none focus:text-primary transition-all"/>
+                                <!-- Kumpulan Opsi Datalist ICD-10 -->
+                                <datalist id="daftar-icd">
+                                    <option value="A91 | Demam Berdarah Dengue (DBD)"></option>
+                                    <option value="J06.9 | ISPA Akut"></option>
+                                    <option value="A09 | Diare Akut Gastroenteritis"></option>
+                                    <option value="I10 | Hipertensi Esensial"></option>
+                                    <option value="E11.9 | Diabetes Melitus Tipe 2"></option>
+                                </datalist>
+                            </div>
+
+                            <!-- Input: Umur -->
+                            <div class="flex flex-col gap-2">
+                                <label class="text-xs font-semibold text-on-surface flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[16px] text-primary">escalator_warning</span>
+                                    Umur (Tahun) <span class="text-error">*</span>
+                                </label>
+                                <input type="number" id="input-umur" min="0" required placeholder="Contoh: 25" class="w-full bg-surface rounded-xl px-4 py-3 text-sm text-on-surface font-medium neo-inset focus:outline-none focus:text-primary transition-all"/>
+                            </div>
+
+                            <!-- Input: Jenis Kelamin (Dropdown/Select) -->
+                            <div class="flex flex-col gap-2">
+                                <label class="text-xs font-semibold text-on-surface flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[16px] text-primary">wc</span>
+                                    Jenis Kelamin <span class="text-error">*</span>
+                                </label>
+                                <select id="input-kelamin" required class="w-full bg-surface rounded-xl px-4 py-3 text-sm text-on-surface font-medium neo-inset focus:outline-none focus:text-primary transition-all appearance-none cursor-pointer">
+                                    <option value="Laki-laki">Laki-laki</option>
+                                    <option value="Perempuan">Perempuan</option>
+                                </select>
+                            </div>
+
+                            <!-- Input: Kabupaten/Kota (Dibuat readonly) -->
+                            <div class="flex flex-col gap-2">
+                                <label class="text-xs font-semibold text-on-surface flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[16px] text-primary">location_city</span>
+                                    Kabupaten / Kota <span class="text-error">*</span>
+                                </label>
+                                <input type="text" id="input-kabupaten" value="KABUPATEN BANYUMAS" readonly class="w-full bg-surface rounded-xl px-4 py-3 text-sm text-on-surface-variant font-medium neo-inset focus:outline-none cursor-not-allowed opacity-70"/>
+                            </div>
+
+                            <!-- Input: Kecamatan (Menggunakan Datalist, span 2 kolom di layar lebar) -->
+                            <div class="flex flex-col gap-2 md:col-span-2">
+                                <label class="text-xs font-semibold text-on-surface flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[16px] text-primary">near_me</span>
+                                    Kecamatan <span class="text-error">*</span>
+                                </label>
+                                <input list="daftar-kecamatan" id="input-kecamatan" required placeholder="Pilih kecamatan..." class="w-full bg-surface rounded-xl px-4 py-3 text-sm text-on-surface font-medium neo-inset focus:outline-none focus:text-primary transition-all"/>
+                                <!-- Datalist Opsi Kecamatan -->
+                                <datalist id="daftar-kecamatan">
+                                    <option value="Coblong"></option>
+                                    <option value="Sukajadi"></option>
+                                    <option value="Cicendo"></option>
+                                    <option value="Andir"></option>
+                                    <option value="Buahbatu"></option>
+                                </datalist>
+                            </div>
+
+                            <!-- Kumpulan Tombol Aksi Form -->
+                            <div class="md:col-span-2 flex items-center justify-end gap-3 pt-4 border-t border-surface-variant/40 mt-2">
+                                <!-- Input tersembunyi untuk menyimpan ID saat proses 'Edit' -->
+                                <input type="hidden" id="edit-id" value="">
+                                
+                                <!-- Tombol Batal Edit (Hanya muncul saat mode edit aktif) -->
+                                <button type="button" id="btn-batal-edit" onclick="batalkanEdit()" class="hidden px-6 py-3 rounded-xl bg-surface neo-raised text-on-surface-variant hover:text-error text-xs font-semibold active:neo-inset transition-all flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">close</span> Batal Edit
+                                </button>
+                                
+                                <!-- Tombol Simpan Form (Submit) -->
+                                <button type="submit" id="btn-simpan-form" class="px-7 py-3 rounded-xl bg-surface neo-raised hover:text-primary active:neo-inset text-primary text-xs font-semibold transition-all flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">save</span> Simpan Data
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- === VIEW 2: TABEL RIWAYAT PASIEN === -->
+                <div id="view-riwayat" class="hidden w-full flex flex-col gap-6">
+                    <!-- Judul Halaman Riwayat -->
+                    <div class="flex flex-col gap-1.5 mb-2">
+                        <div class="flex items-center gap-2 text-xs uppercase tracking-wider font-semibold text-primary">
+                            <span class="material-symbols-outlined text-[16px]">database</span> Data Tersimpan
+                        </div>
+                        <h1 class="text-2xl lg:text-3xl font-headline font-semibold text-on-surface tracking-tight">Riwayat Kunjungan Pasien</h1>
+                        <p class="text-sm text-on-surface-variant">Log register kunjungan rawat jalan faskes.</p>
+                    </div>
+
+                    <div class="p-6 rounded-xl bg-surface neo-raised flex flex-col w-full max-w-6xl">
+                        <!-- Bilah Pencarian (Search Bar) untuk memfilter tabel -->
+                        <div class="flex items-center mb-6">
+                            <div class="w-full md:w-96 flex items-center px-4 py-3 rounded-xl bg-surface neo-inset text-on-surface">
+                                <span class="material-symbols-outlined text-[20px] text-on-surface-variant mr-3 select-none">search</span>
+                                <input type="text" id="input-cari-riwayat" placeholder="Cari penyakit, nama, wilayah..." class="bg-transparent border-none outline-none w-full text-sm placeholder:text-on-surface-variant text-on-surface font-body"/>
+                            </div>
+                        </div>
+
+                        <!-- Struktur Tabel HTML -->
+                        <div class="overflow-x-auto rounded-xl bg-surface neo-inset p-1 border border-surface-variant/30">
+                            <table class="w-full text-left text-xs text-on-surface border-collapse">
+                                <thead>
+                                    <!-- Baris Header Tabel -->
+                                    <tr class="text-on-surface-variant font-semibold uppercase tracking-wider text-[11px] border-b border-surface-variant/40">
+                                        <th class="py-3.5 px-4">Tanggal</th>
+                                        <th class="py-3.5 px-4">Nama Pasien</th>
+                                        <th class="py-3.5 px-4">Penyakit</th>
+                                        <th class="py-3.5 px-4">Umur</th>
+                                        <th class="py-3.5 px-4">Kelamin</th>
+                                        <th class="py-3.5 px-4">Wilayah</th>
+                                        <th class="py-3.5 px-4 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <!-- Tubuh Tabel (Akan diisi secara dinamis oleh JavaScript) -->
+                                <tbody id="tabel-riwayat-body" class="divide-y divide-surface-variant/30">
+                                    <!-- Baris Placeholder saat data kosong/belum dimuat -->
+                                    <tr><td colspan="7" class="py-8 text-center text-on-surface-variant font-medium">Klik menu ini untuk memuat data...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- === VIEW 3: DASBOR PREDIKSI AI === -->
+                <div id="view-prediksi" class="hidden w-full flex flex-col gap-6">
+                    <!-- Judul & Tombol Export PDF -->
+                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                        <div class="flex flex-col gap-1.5">
+                            <h1 class="text-2xl lg:text-3xl font-headline font-semibold text-on-surface tracking-tight">Dasbor Analitik & Prediksi AI</h1>
+                        </div>
+                        <div class="flex items-center">
+                            <!-- Tombol Trigger html2pdf -->
+                            <button id="btn-export-pdf" class="px-4 py-2.5 rounded-xl bg-surface neo-raised hover:text-error active:neo-inset text-xs font-semibold text-on-surface flex items-center gap-2 transition-all">
+                                <span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+                                <span>Unduh Laporan (PDF)</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Panel Filter Parameter AI -->
+                    <div class="p-5 rounded-xl bg-surface neo-raised flex flex-col md:flex-row items-end gap-4">
+                        <div class="flex-1 w-full">
+                            <label class="block text-xs font-medium text-on-surface-variant mb-2">Parameter Analisis (Kode ICD / Penyakit)</label>
+                            <div class="relative">
+                                <!-- Input Pencarian Penyakit Terhubung dengan Datalist ICD yang sama -->
+                                <input list="daftar-icd" id="filter-penyakit" placeholder="Ketik penyakit untuk dianalisis AI..." class="w-full appearance-none bg-surface neo-inset rounded-xl px-4 py-3 text-sm font-medium text-on-surface focus:outline-none">
+                            </div>
+                        </div>
+                        <!-- Tombol untuk Mengeksekusi Fetch API ke Backend Python -->
+                        <button id="btn-prediksi" class="w-full md:w-auto py-3 px-6 rounded-xl bg-surface neo-raised text-primary font-semibold text-sm active:neo-inset flex items-center justify-center gap-2 transition-all">
+                            <span class="material-symbols-outlined text-[20px]">insights</span>
+                            <span>Terapkan Model AI</span>
+                        </button>
+                    </div>
+
+                    <!-- === AREA CETAK PDF === -->
+                    <!-- Area yang dibungkus div ini adalah area yang akan diekstrak menjadi PDF -->
+                    <div id="area-cetak-prediksi" class="bg-surface rounded-xl p-2">
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                            <!-- Kartu Indikator Utama: Angka Total Prediksi -->
+                            <div class="col-span-1 p-6 rounded-xl bg-surface neo-raised flex flex-col justify-center relative overflow-hidden group">
+                                <div class="flex items-start justify-between">
+                                    <div class="flex flex-col">
+                                        <span class="text-xs font-medium text-on-surface-variant uppercase tracking-wider">PREDIKSI KASUS BARU</span>
+                                        <span class="text-[11px] text-on-surface-variant">Estimasi Akhir Periode</span>
+                                    </div>
+                                    <div class="w-10 h-10 rounded-xl bg-surface neo-inset flex items-center justify-center text-primary">
+                                        <span class="material-symbols-outlined text-[22px]">groups</span>
+                                    </div>
+                                </div>
+                                <div class="my-4 flex items-baseline gap-2">
+                                    <!-- Angka Utama (Diusi via JS) -->
+                                    <span id="angka-prediksi" class="text-4xl font-headline font-bold text-on-surface">--</span>
+                                </div>
+                                <div class="text-xs pt-2 border-t border-surface-variant/30 text-on-surface-variant">
+                                    Diproyeksikan oleh algoritma regresi.
+                                </div>
+                            </div>
+
+                            <!-- Panel Chart.js (Grafik Garis/Kurva Prediksi) -->
+                            <div class="col-span-1 lg:col-span-2 p-6 rounded-xl bg-surface neo-raised flex flex-col">
+                                <div class="flex items-center gap-2 mb-4">
+                                    <span class="material-symbols-outlined text-primary text-[22px]">monitoring</span>
+                                    <h2 class="text-sm font-headline font-bold text-on-surface uppercase">Kurva Proyeksi Prediktif</h2>
+                                </div>
+                                <!-- Kontainer Canvas Grafik (Chart.js perlu Canvas HTML) -->
+                                <div class="relative flex-1 w-full min-h-[220px] rounded-xl bg-surface neo-inset p-3">
+                                    <canvas id="grafik-prediksi-canvas"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Grid Analisis Tambahan -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            
+                            <!-- Panel Sebaran Kewilayahan (Progress Bar) -->
+                            <div class="p-6 rounded-xl bg-surface neo-raised flex flex-col justify-between gap-5">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex flex-col">
+                                        <span class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">Sebaran Kewilayahan</span>
+                                        <h3 class="text-base font-headline font-bold text-on-surface">Proyeksi per Kecamatan</h3>
+                                    </div>
+                                    <span class="p-2 rounded-xl bg-surface neo-inset text-tertiary material-symbols-outlined text-[20px]">location_city</span>
+                                </div>
+                                <!-- Kontainer Dinamis untuk List Wilayah (Diisi via JS) -->
+                                <div class="flex flex-col gap-4 max-h-[200px] overflow-y-auto pr-2" id="konten-kewilayahan">
+                                    <div class="text-sm text-on-surface-variant text-center py-4">Pilih penyakit untuk melihat data</div>
+                                </div>
+                                <div class="p-3 rounded-xl bg-surface neo-inset flex items-center justify-between text-xs text-on-surface-variant mt-2">
+                                    <span>Total Terpetakan:</span>
+                                    <span class="font-bold text-on-surface" id="total-pemetaan">-- Pasien</span>
+                                </div>
+                            </div>
+
+                            <!-- Panel Grafik Demografi (Bar Chart) -->
+                            <div class="p-6 rounded-xl bg-surface neo-raised flex flex-col justify-between gap-5">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex flex-col">
+                                        <span class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">Demografi Pasien</span>
+                                        <h3 class="text-base font-headline font-bold text-on-surface">Rentang Umur Berisiko</h3>
+                                    </div>
+                                    <span class="p-2 rounded-xl bg-surface neo-inset text-error material-symbols-outlined text-[20px]">pie_chart</span>
+                                </div>
+                                
+                                <!-- Kontainer Canvas Demografi Umur -->
+                                <div class="relative flex-1 w-full min-h-[160px] rounded-xl bg-surface neo-inset p-3">
+                                    <canvas id="grafik-demografi-canvas"></canvas>
+                                </div>
+                                
+                                <!-- Kotak Teks Kesimpulan Prioritas -->
+                                <div class="flex items-center gap-3 p-3.5 rounded-xl bg-error/10 neo-inset mt-2">
+                                    <span class="material-symbols-outlined text-error text-[20px]">priority_high</span>
+                                    <p class="text-xs text-on-surface leading-relaxed" id="teks-prioritas">
+                                        <strong class="font-bold">Prioritas Khusus:</strong> Menunggu kalkulasi data AI...
+                                    </p>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <!-- === AKHIR AREA CETAK PDF === -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 5. IMPORT SKRIP JS LOGIKA APLIKASI         -->
+    <!-- ========================================== -->
+    <!-- Memuat file JavaScript kustom pada bagian paling bawah agar HTML di-render terlebih dahulu -->
+    <script src="js/auth.js"></script>
+    <script src="js/navigasi.js"></script>
+    <script src="js/kunjungan.js"></script>
+    <script src="js/prediksi.js"></script>
+
+</body>
+</html>
