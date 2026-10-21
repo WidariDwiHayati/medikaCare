@@ -76,12 +76,12 @@ function tampilkanDashboard(userData) {
     // --- Role-Based Access Control (Manajemen Akses Berdasarkan Peran) ---
     // Jika peran pengguna adalah "manajer"
     if (userData.role === "manajer") {
-        // Tampilkan menu riwayat pasien
-        document.getElementById("menu-riwayat").classList.remove("hidden");
+        // Tampilkan menu prediksi AI
+        document.getElementById("menu-prediksi").classList.remove("hidden");
         // Sembunyikan menu Input Data Kunjungan (manajer hanya bisa melihat/menganalisis, bukan menginput)
         document.getElementById("menu-input").classList.add("hidden");
         // Pindahkan tampilan aktif secara otomatis ke tab riwayat pasien
-        ubahTampilan(document.getElementById("menu-riwayat"), document.getElementById("view-prediksi"));
+        ubahTampilan(document.getElementById("menu-riwayat"), document.getElementById("view-riwayat"));
     } 
     // Jika peran pengguna BUKAN "manajer" (misal: admin, petugas)
     else {
